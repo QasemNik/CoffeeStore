@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/Navbar.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-// Define navigation links as an array of objects
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
@@ -21,14 +22,33 @@ const navLinks = [
 ];
 
 function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (router.query.q) {
+      setSearch(router.query.q);
+    }
+  }, [router.query.q]);
 
   const toggleHandler = () => {
     setIsOpen((prev) => !prev);
   };
 
   const isActive = (path) => router.pathname === path;
+
+  const searchHandlerWithEnter = (e) => {
+    if (e.key === "Enter" && search.trim()) {
+      router.push(`/search?q=${search}`);
+    }
+  };
+
+  const searchHandler = () => {
+    if (search.trim()) {
+      router.push(`/search?q=${search}`);
+    }
+  };
 
   return (
     <div className={`container-fluid p-0 ${styles.nav_bar}`}>
@@ -40,6 +60,20 @@ function Navbar() {
             GEM-Coffee
           </h1>
         </Link>
+
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={searchHandlerWithEnter}
+          placeholder="Search..."
+          className={styles.search_input}
+        />
+        <FontAwesomeIcon
+          onClick={searchHandler}
+          icon={faSearch}
+          className={styles.search_icon}
+        />
 
         {/* Toggle Navbar */}
         <button
@@ -55,10 +89,7 @@ function Navbar() {
           id="navbarCollapse"
         >
           <div className={`${styles.navbar_nav} ml-auto p-4`}>
-            {navLinks.map((link) =>
-              link.isDropdown ? (
-                <div key={link.label}
-                  className={styles.dropdown}>
+            {navLinks.map((link) => link.isDropdown ? (                <div key={link.label} className={styles.dropdown}>
                   <a
                     href="#"
                     className={`${styles.nav_link} ${styles.dropdown_toggle}`}

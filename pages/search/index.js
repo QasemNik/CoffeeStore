@@ -18,6 +18,7 @@ export async function getServerSideProps({ query }) {
     const keyword = query.q?.toLowerCase() || "";
     const res = await fetch("http://localhost:4000/menu");
     const data = await res.json();
+    
     const filteredData = keyword
       ? data.filter(
           ({ type, title }) =>
