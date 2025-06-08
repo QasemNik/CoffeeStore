@@ -77,7 +77,7 @@ Browser compatible and SEO-friendly
 
 📸 Screenshots
 
-![nex-coffee](./public/screenshot/next-coffee.png)
+![nex-coffee](./screenshot/next-coffee.png)
 
 🧾 License
 This project is based on a free HTML template and is used here for educational and non-commercial purposes.
